@@ -1,6 +1,7 @@
 package vietj;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetSocket;
 import io.vertx.core.streams.Pump;
@@ -13,10 +14,14 @@ import java.util.Set;
  */
 public class FrontClient extends AbstractVerticle {
 
+  public static void main(String[] args) {
+    Vertx vertx = Vertx.vertx();
+    vertx.deployVerticle(FrontClient.class.getName());
+  }
+
   private int numClients = 50;
   private NetClient client;
   private int size = 0;
-  private long totalSent;
   private Set<BufferReadStream> streams = new HashSet<>();
 
   @Override
@@ -24,7 +29,7 @@ public class FrontClient extends AbstractVerticle {
     client = vertx.createNetClient();
     connect();
     vertx.setPeriodic(1000, id -> {
-      streams.forEach(s -> totalSent += s.sent());
+      long totalSent = streams.stream().map(BufferReadStream::sent).<Long>reduce(0L, (a, b) -> a+b);
       System.out.println("sent: " + totalSent + " / " + size);
     });
   }

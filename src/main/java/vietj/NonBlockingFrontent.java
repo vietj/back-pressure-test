@@ -1,6 +1,7 @@
 package vietj;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetSocket;
@@ -12,6 +13,11 @@ import java.util.Random;
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
 public class NonBlockingFrontent extends AbstractVerticle {
+
+  public static void main(String[] args) {
+    Vertx vertx = Vertx.vertx();
+    vertx.deployVerticle(NonBlockingFrontent.class.getName());
+  }
 
   private NetServer server;
   private NetClient client;

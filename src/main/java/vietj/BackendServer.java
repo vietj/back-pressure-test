@@ -1,6 +1,7 @@
 package vietj;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.core.net.NetServer;
 
 import java.util.Random;
@@ -10,10 +11,15 @@ import java.util.Random;
  */
 public class BackendServer extends AbstractVerticle {
 
+  public static void main(String[] args) {
+    Vertx vertx = Vertx.vertx();
+    vertx.deployVerticle(BackendServer.class.getName());
+  }
+
   private NetServer server;
-  private long threshold = 256000;
-  private long minPause = 0;
-  private long maxPause = 10;
+  private long threshold = 64000;
+  private long minPause = 100;
+  private long maxPause = 150;
   private long received;
 
   @Override

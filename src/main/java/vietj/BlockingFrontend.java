@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class BlockingFrontend {
 
   public static void main(String[] args) throws IOException {
-    ExecutorService exec = Executors.newFixedThreadPool(50);
+    ExecutorService exec = Executors.newFixedThreadPool(500);
     ServerSocket server = new ServerSocket();
     server.bind(new InetSocketAddress("localhost", 1234));
     while (true) {
@@ -23,9 +23,7 @@ public class BlockingFrontend {
       exec.execute(() -> {
         try {
           InputStream in = src.getInputStream();
-          Socket dst = new Socket();
-          dst.connect(new InetSocketAddress("localhost", 12345));
-          OutputStream out = dst.getOutputStream();
+          OutputStream out = src.getOutputStream();
           byte[] buffer = new byte[256 * 1024];
           while (true) {
             int len = in.read(buffer);
